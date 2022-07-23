@@ -20,7 +20,7 @@ Parameters:
     Type: String
     MinLength: 1
   Branch:
-    Default: master
+    Default: main
     Description: Branch to use from Repo. Only the Name. not the URL
     Type: String
 Metadata:
@@ -84,7 +84,7 @@ Resources:
               commands:
                 - echo "Running training.py"
                 - cd source
-                - python training.py "${SagemakerRole.Arn}" "${DataBucket}" "${AWS::StackName}" $CODEBUILD_RESOLVED_SOURCE_VERSION
+                - python training.py "${SagemakerRole.Arn}" "${DataBucket}" "${AWS::StackName}" $(echo $CODEBUILD_RESOLVED_SOURCE_VERSION)
             post_build:
               commands:
                 - echo "Cleaning"
@@ -122,7 +122,7 @@ Resources:
             build:
               commands:
               - echo "Running test.py"
-              - python source/test.py "${AWS::StackName}" $CODEBUILD_RESOLVED_SOURCE_VERSION
+              - python source/test.py "${AWS::StackName}" $(echo $CODEBUILD_RESOLVED_SOURCE_VERSION)
       TimeoutInMinutes: 30
 
 
